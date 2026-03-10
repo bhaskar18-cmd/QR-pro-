@@ -12,12 +12,128 @@ export const FuturisticBackground: React.FC = () => {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
+    let shapes: Shape[] = [];
+    let streams: DataStream[] = [];
+    let mouse = { x: -1000, y: -1000 };
     
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       initParticles();
+      initShapes();
+      initStreams();
     };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+
+    class DataStream {
+      x: number;
+      y: number;
+      speed: number;
+      length: number;
+      opacity: number;
+
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.speed = Math.random() * 2 + 1;
+        this.length = Math.random() * 100 + 50;
+        this.opacity = Math.random() * 0.3 + 0.15;
+      }
+
+      update() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.y = -this.length;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        if (!ctx) return;
+        const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length);
+        gradient.addColorStop(0, 'rgba(34, 211, 238, 0)');
+        gradient.addColorStop(1, `rgba(34, 211, 238, ${this.opacity})`);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x, this.y + this.length);
+        ctx.stroke();
+      }
+    }
+
+    class Shape {
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      rotation: number;
+      rotationSpeed: number;
+      type: 'triangle' | 'square' | 'circle';
+      color: string;
+      opacity: number;
+
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 40 + 20;
+        this.speedX = Math.random() * 0.2 - 0.1;
+        this.speedY = Math.random() * 0.2 - 0.1;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = Math.random() * 0.01 - 0.005;
+        const types: ('triangle' | 'square' | 'circle')[] = ['triangle', 'square', 'circle'];
+        this.type = types[Math.floor(Math.random() * types.length)];
+        this.color = Math.random() > 0.5 ? '99, 102, 241' : '34, 211, 238';
+        this.opacity = Math.random() * 0.15 + 0.1;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.rotation += this.rotationSpeed;
+
+        if (this.x > canvas.width + this.size) this.x = -this.size;
+        else if (this.x < -this.size) this.x = canvas.width + this.size;
+        
+        if (this.y > canvas.height + this.size) this.y = -this.size;
+        else if (this.y < -this.size) this.y = canvas.height + this.size;
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.strokeStyle = `rgba(${this.color}, ${this.opacity * 2})`;
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        if (this.type === 'triangle') {
+          ctx.moveTo(0, -this.size / 2);
+          ctx.lineTo(this.size / 2, this.size / 2);
+          ctx.lineTo(-this.size / 2, this.size / 2);
+          ctx.closePath();
+        } else if (this.type === 'square') {
+          ctx.rect(-this.size / 2, -this.size / 2, this.size, this.size);
+        } else {
+          ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+        }
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
 
     class Particle {
       x: number;
@@ -40,6 +156,22 @@ export const FuturisticBackground: React.FC = () => {
       }
 
       update() {
+        // Mouse interaction
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const forceDirectionX = dx / distance;
+        const forceDirectionY = dy / distance;
+        const maxDistance = 100;
+        const force = (maxDistance - distance) / maxDistance;
+        const directionX = forceDirectionX * force * 5;
+        const directionY = forceDirectionY * force * 5;
+
+        if (distance < maxDistance) {
+          this.x -= directionX;
+          this.y -= directionY;
+        }
+
         this.x += this.speedX;
         this.y += this.speedY;
 
@@ -67,6 +199,22 @@ export const FuturisticBackground: React.FC = () => {
       const numberOfParticles = (canvas.width * canvas.height) / 12000;
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
+      }
+    };
+
+    const initShapes = () => {
+      shapes = [];
+      const numberOfShapes = 25;
+      for (let i = 0; i < numberOfShapes; i++) {
+        shapes.push(new Shape());
+      }
+    };
+
+    const initStreams = () => {
+      streams = [];
+      const numberOfStreams = 40;
+      for (let i = 0; i < numberOfStreams; i++) {
+        streams.push(new DataStream());
       }
     };
 
@@ -130,6 +278,16 @@ export const FuturisticBackground: React.FC = () => {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       });
 
+      for (let i = 0; i < streams.length; i++) {
+        streams[i].update();
+        streams[i].draw();
+      }
+
+      for (let i = 0; i < shapes.length; i++) {
+        shapes[i].update();
+        shapes[i].draw();
+      }
+
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
@@ -139,11 +297,15 @@ export const FuturisticBackground: React.FC = () => {
     };
 
     window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
     resize();
     animate();
 
     return () => {
       window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -152,7 +314,7 @@ export const FuturisticBackground: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ background: '#0f172a', zIndex: -1 }}
+      style={{ background: 'transparent', zIndex: -1 }}
     />
   );
 };

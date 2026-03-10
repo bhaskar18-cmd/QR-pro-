@@ -5,6 +5,7 @@ import { Tabs } from './components/Tabs';
 import { PreviewPanel } from './components/PreviewPanel';
 import { QrCode } from 'lucide-react';
 import { FuturisticBackground } from './components/FuturisticBackground';
+import { Footer } from './components/Footer';
 
 const initialState: AppState = {
   content: {
@@ -32,7 +33,7 @@ const initialState: AppState = {
     type: 'none',
     logoUrl: null,
     textValue: '',
-    iconSlug: 'logos:github-icon',
+    iconSlug: '',
     logoSize: 0.2,
   },
   advanced: {
@@ -47,8 +48,13 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('Content');
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-900 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden relative">
+    <div className="min-h-screen text-slate-900 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden relative">
       <FuturisticBackground />
+      
+      {/* Animated Blobs */}
+      <div className="bg-blob bg-indigo-600 top-[-10%] left-[-10%] animate-blob" />
+      <div className="bg-blob bg-purple-600 bottom-[-10%] right-[-10%] animate-blob animation-delay-2000" />
+      <div className="bg-blob bg-cyan-600 top-[40%] left-[30%] animate-blob animation-delay-4000" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         <header className="flex items-center justify-between mb-12">
@@ -57,7 +63,7 @@ export default function App() {
               <QrCode className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-white">QR Craft</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-white">QR craft®</h1>
               <p className="text-sm font-bold text-slate-100">Next-Gen Professional QR Code Generator</p>
             </div>
           </div>
@@ -87,6 +93,8 @@ export default function App() {
             <PreviewPanel state={state} />
           </motion.div>
         </main>
+
+        <Footer />
       </div>
     </div>
   );

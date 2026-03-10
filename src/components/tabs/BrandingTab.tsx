@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Fuse from 'fuse.js';
 import { AppState } from '../../types';
-import { Image as ImageIcon, Type, LayoutGrid, Upload, Search, Smartphone } from 'lucide-react';
+import { Image as ImageIcon, Type, LayoutGrid, Upload, Search, Smartphone, X } from 'lucide-react';
 import { ImageCropModal } from '../ImageCropModal';
 
 interface BrandingTabProps {
@@ -20,6 +20,10 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
   const [appSearchQuery, setAppSearchQuery] = useState('');
   const [isAppSearching, setIsAppSearching] = useState(false);
   const [appResults, setAppResults] = useState<any[]>([]);
+
+  const [brokenIcons, setBrokenIcons] = useState<Set<string>>(new Set());
+
+  const [brokenAppIcons, setBrokenAppIcons] = useState<Set<number>>(new Set());
 
   const handleChange = (field: string, value: any) => {
     setState((prev) => ({
@@ -203,67 +207,82 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
   ];
 
   const displayedIcons = useMemo(() => {
-    if (!searchQuery) return appIcons;
+    let icons = [];
+    if (!searchQuery) {
+      icons = appIcons;
+    } else if (apiIcons.length > 0) {
+      icons = apiIcons;
+    } else {
+      // Fallback to local search while loading or if API fails
+      const fuse = new Fuse(appIcons, {
+        keys: ['id', 'slug'],
+        threshold: 0.4,
+        distance: 100,
+      });
+      icons = fuse.search(searchQuery).map(result => result.item);
+    }
     
-    // If we have API results, use those
-    if (apiIcons.length > 0) return apiIcons;
-
-    // Fallback to local search while loading or if API fails
-    const fuse = new Fuse(appIcons, {
-      keys: ['id', 'slug'],
-      threshold: 0.4,
-      distance: 100,
-    });
-    
-    return fuse.search(searchQuery).map(result => result.item);
-  }, [searchQuery, apiIcons, appIcons]);
+    // Filter out broken icons
+    return icons.filter(icon => !brokenIcons.has(icon.slug));
+  }, [searchQuery, apiIcons, appIcons, brokenIcons]);
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-5 gap-2">
+        <button
+          onClick={() => handleChange('type', 'none')}
+          className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${
+            branding.type === 'none'
+              ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
+              : 'bg-white border-slate-200 text-black hover:bg-slate-50'
+          }`}
+        >
+          <X className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-bold">None</span>
+        </button>
         <button
           onClick={() => handleChange('type', 'image')}
-          className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
+          className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${
             branding.type === 'image'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
               : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
-          <ImageIcon className="w-5 h-5 mb-2" />
-          <span className="text-xs font-bold">Image</span>
+          <ImageIcon className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-bold">Image</span>
         </button>
         <button
           onClick={() => handleChange('type', 'text')}
-          className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
+          className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${
             branding.type === 'text'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
               : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
-          <Type className="w-5 h-5 mb-2" />
-          <span className="text-xs font-bold">Text</span>
+          <Type className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-bold">Text</span>
         </button>
         <button
           onClick={() => handleChange('type', 'icon')}
-          className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
+          className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${
             branding.type === 'icon'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
               : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
-          <LayoutGrid className="w-5 h-5 mb-2" />
-          <span className="text-xs font-bold text-center">Vector Icon</span>
+          <LayoutGrid className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-bold text-center">Icon</span>
         </button>
         <button
           onClick={() => handleChange('type', 'app')}
-          className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
+          className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${
             branding.type === 'app'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
               : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
-          <Smartphone className="w-5 h-5 mb-2" />
-          <span className="text-xs font-bold text-center">Real App</span>
+          <Smartphone className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-bold text-center">App</span>
         </button>
       </div>
 
@@ -358,8 +377,8 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
                     src={`https://api.iconify.design/${icon.slug.replace(':', '/')}.svg`}
                     alt={icon.id}
                     className="w-8 h-8"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
+                    onError={() => {
+                      setBrokenIcons((prev) => new Set(prev).add(icon.slug));
                     }}
                   />
                 </button>
@@ -401,7 +420,7 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
             </div>
 
             <div className="grid grid-cols-4 gap-4 max-h-64 overflow-y-auto p-1 custom-scrollbar">
-              {appResults.map((app) => (
+              {appResults.filter(app => !brokenAppIcons.has(app.trackId)).map((app) => (
                 <button
                   key={app.trackId}
                   onClick={() => handleChange('logoUrl', app.artworkUrl512)}
@@ -416,8 +435,11 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
                     src={app.artworkUrl512}
                     alt={app.trackName}
                     className="w-12 h-12 rounded-xl shadow-sm"
+                    onError={() => {
+                      setBrokenAppIcons((prev) => new Set(prev).add(app.trackId));
+                    }}
                   />
-                  <span className="text-[10px] font-medium text-slate-600 text-center line-clamp-2 leading-tight">
+                  <span className="text-[10px] font-bold text-black text-center line-clamp-2 leading-tight">
                     {app.trackName}
                   </span>
                 </button>

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppState } from '../../types';
+import { FuturisticColorPicker } from '../FuturisticColorPicker';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface StyleTabProps {
   state: AppState;
@@ -8,6 +10,18 @@ interface StyleTabProps {
 
 export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
   const { style } = state;
+  const [activePicker, setActivePicker] = useState<'fg' | 'bg' | 'gStart' | 'gEnd' | null>(null);
+  const pickerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        setActivePicker(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleChange = (field: string, value: any) => {
     setState((prev) => ({
@@ -141,47 +155,62 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100">
+          <div className="pt-4 border-t border-slate-100" ref={pickerRef}>
             <h3 className="text-sm font-bold text-black mb-4 uppercase tracking-wider">Color Palette</h3>
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-bold text-black mb-2">Background Color</label>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="color"
-                      className="w-10 h-10 rounded cursor-pointer border-0 p-0"
-                      value={style.bgColor === 'transparent' ? '#ffffff' : style.bgColor}
-                      onChange={(e) => handleChange('bgColor', e.target.value)}
-                      disabled={!!style.bgImage}
-                    />
-                    <input
-                      type="text"
-                      className="flex-1 p-2 border border-slate-200 rounded-lg text-sm uppercase text-black"
-                      value={style.bgColor}
-                      onChange={(e) => handleChange('bgColor', e.target.value)}
-                      disabled={!!style.bgImage}
-                    />
-                  </div>
+                <div className="relative">
+                  <label className="block text-sm font-bold text-black mb-2">Background</label>
+                  <button
+                    onClick={() => setActivePicker(activePicker === 'bg' ? null : 'bg')}
+                    className="w-full flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 transition-all"
+                    disabled={!!style.bgImage}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div 
+                        className="w-6 h-6 rounded-md border border-slate-200" 
+                        style={{ backgroundColor: style.bgColor === 'transparent' ? '#ffffff' : style.bgColor }}
+                      />
+                      <span className="text-xs font-mono uppercase text-black">{style.bgColor}</span>
+                    </div>
+                    {activePicker === 'bg' ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  </button>
+                  {activePicker === 'bg' && (
+                    <div className="absolute z-50 mt-2 left-0 right-0">
+                      <FuturisticColorPicker 
+                        color={style.bgColor === 'transparent' ? '#ffffff' : style.bgColor} 
+                        onChange={(c) => handleChange('bgColor', c)} 
+                        onClose={() => setActivePicker(null)}
+                      />
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <label className="block text-sm font-bold text-black mb-2">Foreground Color</label>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="color"
-                      className="w-10 h-10 rounded cursor-pointer border-0 p-0"
-                      value={style.fgColor}
-                      onChange={(e) => handleChange('fgColor', e.target.value)}
-                      disabled={style.gradientEnabled}
-                    />
-                    <input
-                      type="text"
-                      className="flex-1 p-2 border border-slate-200 rounded-lg text-sm uppercase text-black"
-                      value={style.fgColor}
-                      onChange={(e) => handleChange('fgColor', e.target.value)}
-                      disabled={style.gradientEnabled}
-                    />
-                  </div>
+
+                <div className="relative">
+                  <label className="block text-sm font-bold text-black mb-2">Foreground</label>
+                  <button
+                    onClick={() => setActivePicker(activePicker === 'fg' ? null : 'fg')}
+                    className="w-full flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 transition-all"
+                    disabled={style.gradientEnabled}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div 
+                        className="w-6 h-6 rounded-md border border-slate-200" 
+                        style={{ backgroundColor: style.fgColor }}
+                      />
+                      <span className="text-xs font-mono uppercase text-black">{style.fgColor}</span>
+                    </div>
+                    {activePicker === 'fg' ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  </button>
+                  {activePicker === 'fg' && (
+                    <div className="absolute z-50 mt-2 left-0 right-0">
+                      <FuturisticColorPicker 
+                        color={style.fgColor} 
+                        onChange={(c) => handleChange('fgColor', c)} 
+                        onClose={() => setActivePicker(null)}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -240,23 +269,49 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                 {style.gradientEnabled && (
                   <div className="space-y-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
                     <div className="grid grid-cols-2 gap-4">
-                      <div>
+                      <div className="relative">
                         <label className="block text-xs font-bold text-black mb-1">Start Color</label>
-                        <input
-                          type="color"
-                          className="w-full h-8 rounded cursor-pointer border-0 p-0"
-                          value={style.gradientStart}
-                          onChange={(e) => handleChange('gradientStart', e.target.value)}
-                        />
+                        <button
+                          onClick={() => setActivePicker(activePicker === 'gStart' ? null : 'gStart')}
+                          className="w-full flex items-center justify-between p-2 bg-white border border-slate-200 rounded-lg hover:border-indigo-300 transition-all"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 rounded border border-slate-200" style={{ backgroundColor: style.gradientStart }} />
+                            <span className="text-[10px] font-mono uppercase text-black">{style.gradientStart}</span>
+                          </div>
+                          {activePicker === 'gStart' ? <ChevronUp className="w-3 h-3 text-slate-400" /> : <ChevronDown className="w-3 h-3 text-slate-400" />}
+                        </button>
+                        {activePicker === 'gStart' && (
+                          <div className="absolute z-50 mt-2 left-0 right-[-100%]">
+                            <FuturisticColorPicker 
+                              color={style.gradientStart} 
+                              onChange={(c) => handleChange('gradientStart', c)} 
+                              onClose={() => setActivePicker(null)}
+                            />
+                          </div>
+                        )}
                       </div>
-                      <div>
+                      <div className="relative">
                         <label className="block text-xs font-bold text-black mb-1">End Color</label>
-                        <input
-                          type="color"
-                          className="w-full h-8 rounded cursor-pointer border-0 p-0"
-                          value={style.gradientEnd}
-                          onChange={(e) => handleChange('gradientEnd', e.target.value)}
-                        />
+                        <button
+                          onClick={() => setActivePicker(activePicker === 'gEnd' ? null : 'gEnd')}
+                          className="w-full flex items-center justify-between p-2 bg-white border border-slate-200 rounded-lg hover:border-indigo-300 transition-all"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 rounded border border-slate-200" style={{ backgroundColor: style.gradientEnd }} />
+                            <span className="text-[10px] font-mono uppercase text-black">{style.gradientEnd}</span>
+                          </div>
+                          {activePicker === 'gEnd' ? <ChevronUp className="w-3 h-3 text-slate-400" /> : <ChevronDown className="w-3 h-3 text-slate-400" />}
+                        </button>
+                        {activePicker === 'gEnd' && (
+                          <div className="absolute z-50 mt-2 left-[-100%] right-0">
+                            <FuturisticColorPicker 
+                              color={style.gradientEnd} 
+                              onChange={(c) => handleChange('gradientEnd', c)} 
+                              onClose={() => setActivePicker(null)}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                     

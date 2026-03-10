@@ -4,6 +4,7 @@ import { AppState } from '../types';
 import { generateQROptions, generateQRData } from '../utils/qrUtils';
 import { Download, Copy, ScanLine, AlertCircle, X } from 'lucide-react';
 import { SimulateScanModal } from './SimulateScanModal';
+import { TowerIndicator } from './TowerIndicator';
 
 interface PreviewPanelProps {
   state: AppState;
@@ -112,6 +113,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({ state }) => {
       <div className="flex p-4 gap-2 border-b border-slate-100 justify-between items-center bg-slate-50/50">
         <h2 className="text-sm font-bold text-black uppercase tracking-wider">Preview</h2>
         <div className="flex items-center space-x-3 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+          <TowerIndicator isActive={liveMode} />
           <span className="text-xs font-bold text-black">Live Mode</span>
           <button
             onClick={() => setLiveMode(!liveMode)}

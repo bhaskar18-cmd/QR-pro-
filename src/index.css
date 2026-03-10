@@ -38,6 +38,17 @@ body {
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
+
+  .bg-blob {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -5;
+    opacity: 0.15;
+    pointer-events: none;
+  }
 }
 
 @keyframes float {
