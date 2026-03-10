@@ -26,14 +26,17 @@ export const FuturisticBackground: React.FC = () => {
       speedX: number;
       speedY: number;
       opacity: number;
+      color: string;
 
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.1;
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.opacity = Math.random() * 0.5 + 0.1;
+        this.size = Math.random() * 3 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.opacity = Math.random() * 0.6 + 0.1;
+        // Randomly pick between indigo and cyan for a future look
+        this.color = Math.random() > 0.5 ? '99, 102, 241' : '34, 211, 238';
       }
 
       update() {
@@ -49,16 +52,19 @@ export const FuturisticBackground: React.FC = () => {
 
       draw() {
         if (!ctx) return;
-        ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `rgba(${this.color}, ${this.opacity})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
+        ctx.shadowBlur = 0; // Reset shadow for other drawing
       }
     }
 
     const initParticles = () => {
       particles = [];
-      const numberOfParticles = (canvas.width * canvas.height) / 15000;
+      const numberOfParticles = (canvas.width * canvas.height) / 12000;
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
@@ -66,15 +72,16 @@ export const FuturisticBackground: React.FC = () => {
 
     const drawLines = () => {
       for (let i = 0; i < particles.length; i++) {
-        for (let j = i; j < particles.length; j++) {
+        for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
+          if (distance < 180) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.15 - distance / 1000})`;
-            ctx.lineWidth = 1;
+            const opacity = (1 - distance / 180) * 0.2;
+            ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+            ctx.lineWidth = 0.8;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
@@ -86,26 +93,42 @@ export const FuturisticBackground: React.FC = () => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw a subtle grid
-      ctx.strokeStyle = 'rgba(99, 102, 241, 0.03)';
+      // Draw a subtle moving grid
+      const gridSize = 60;
+      const time = Date.now() / 2000;
+      const offsetX = (time * 20) % gridSize;
+      const offsetY = (time * 15) % gridSize;
+      
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.04)';
       ctx.lineWidth = 1;
-      const gridSize = 50;
       
-      // Moving grid effect
-      const offset = (Date.now() / 50) % gridSize;
-      
-      for (let x = offset; x < canvas.width; x += gridSize) {
-        ctx.beginPath();
+      for (let x = offsetX; x < canvas.width; x += gridSize) {
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
-        ctx.stroke();
       }
-      for (let y = offset; y < canvas.height; y += gridSize) {
-        ctx.beginPath();
+      for (let y = offsetY; y < canvas.height; y += gridSize) {
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
-        ctx.stroke();
       }
+      ctx.stroke();
+
+      // Draw some larger glowing "nebula" spots
+      const spots = [
+        { x: 0.2, y: 0.3, r: 300, c: '99, 102, 241' },
+        { x: 0.8, y: 0.7, r: 400, c: '168, 85, 247' },
+        { x: 0.5, y: 0.5, r: 250, c: '34, 211, 238' }
+      ];
+
+      spots.forEach(spot => {
+        const x = spot.x * canvas.width + Math.sin(time) * 50;
+        const y = spot.y * canvas.height + Math.cos(time) * 50;
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, spot.r);
+        gradient.addColorStop(0, `rgba(${spot.c}, 0.05)`);
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      });
 
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
@@ -128,8 +151,8 @@ export const FuturisticBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 opacity-60"
-      style={{ background: 'linear-gradient(to bottom right, #f8fafc, #eef2ff)' }}
+      className="fixed inset-0 pointer-events-none"
+      style={{ background: '#0f172a', zIndex: -1 }}
     />
   );
 };
