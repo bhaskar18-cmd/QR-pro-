@@ -108,11 +108,11 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({ state }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white/50 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl overflow-hidden sticky top-6">
-      <div className="flex p-4 gap-2 border-b border-indigo-100/50 justify-between items-center bg-white/40">
-        <h2 className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Preview</h2>
+    <div className="flex flex-col h-full bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden sticky top-6">
+      <div className="flex p-4 gap-2 border-b border-slate-100 justify-between items-center bg-slate-50/50">
+        <h2 className="text-sm font-bold text-black uppercase tracking-wider">Preview</h2>
         <div className="flex items-center space-x-3 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-          <span className="text-xs font-medium text-slate-600">Live Mode</span>
+          <span className="text-xs font-bold text-black">Live Mode</span>
           <button
             onClick={() => setLiveMode(!liveMode)}
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
@@ -145,7 +145,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({ state }) => {
         </div>
       </div>
 
-      <div className="p-6 bg-white/60 border-t border-indigo-100/50 space-y-4">
+      <div className="p-6 bg-slate-50 border-t border-slate-100 space-y-4">
         <button
           onClick={() => {
             if (!liveMode) {
@@ -154,7 +154,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({ state }) => {
               setIsScanModalOpen(true);
             }
           }}
-          className="w-full py-4 bg-slate-900 text-white rounded-2xl font-medium shadow-lg hover:bg-slate-800 hover:shadow-xl transition-all flex items-center justify-center space-x-2 group"
+          className="w-full py-4 bg-black text-white rounded-2xl font-bold shadow-lg hover:bg-slate-900 hover:shadow-xl transition-all flex items-center justify-center space-x-2 group"
         >
           <ScanLine className="w-5 h-5 group-hover:scale-110 transition-transform" />
           <span>Simulate Scan</span>
@@ -163,24 +163,24 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({ state }) => {
         <div className="grid grid-cols-3 gap-3">
           <button
             onClick={() => handleDownload('png')}
-            className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-300 transition-all text-slate-700"
+            className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-300 transition-all text-black"
           >
             <Download className="w-5 h-5 mb-1 text-indigo-600" />
-            <span className="text-xs font-medium">PNG</span>
+            <span className="text-xs font-bold">PNG</span>
           </button>
           <button
             onClick={() => handleDownload('svg')}
-            className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-300 transition-all text-slate-700"
+            className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-300 transition-all text-black"
           >
             <Download className="w-5 h-5 mb-1 text-indigo-600" />
-            <span className="text-xs font-medium">SVG</span>
+            <span className="text-xs font-bold">SVG</span>
           </button>
           <button
             onClick={handleCopy}
-            className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-300 transition-all text-slate-700"
+            className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-300 transition-all text-black"
           >
             <Copy className="w-5 h-5 mb-1 text-indigo-600" />
-            <span className="text-xs font-medium">Copy Data</span>
+            <span className="text-xs font-bold">Copy Data</span>
           </button>
         </div>
       </div>

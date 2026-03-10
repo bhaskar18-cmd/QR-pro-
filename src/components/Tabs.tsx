@@ -17,20 +17,20 @@ export const Tabs: React.FC<TabsProps> = ({ activeTab, setActiveTab, state, setS
   const tabs = ['Content', 'Style', 'Logo & Image', 'Advanced'];
 
   return (
-    <div className="flex flex-col h-full bg-white/50 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl overflow-hidden">
-      <div className="flex p-4 gap-2 border-b border-indigo-100/50">
+    <div className="flex flex-col h-full bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden">
+      <div className="flex p-4 gap-2 border-b border-slate-100">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
-              activeTab === tab ? 'text-indigo-700' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100/50'
+            className={`relative px-4 py-2 text-sm font-bold rounded-xl transition-colors ${
+              activeTab === tab ? 'text-indigo-700' : 'text-black hover:text-black hover:bg-slate-100'
             }`}
           >
             {activeTab === tab && (
               <motion.div
                 layoutId="activeTab"
-                className="absolute inset-0 bg-indigo-100/50 rounded-xl"
+                className="absolute inset-0 bg-indigo-50 rounded-xl"
                 transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
               />
             )}

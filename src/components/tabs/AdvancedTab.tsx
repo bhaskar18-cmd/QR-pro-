@@ -24,8 +24,8 @@ export const AdvancedTab: React.FC<AdvancedTabProps> = ({ state, setState }) => 
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-8">
         <div>
           <div className="flex justify-between items-center mb-4">
-            <label className="block text-sm font-medium text-slate-700">Resolution</label>
-            <span className="text-xs font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-md">
+            <label className="block text-sm font-bold text-black">Resolution</label>
+            <span className="text-xs font-bold px-2 py-1 bg-slate-100 text-black rounded-md">
               {advanced.resolution}px
             </span>
           </div>
@@ -38,7 +38,7 @@ export const AdvancedTab: React.FC<AdvancedTabProps> = ({ state, setState }) => 
             value={advanced.resolution}
             onChange={(e) => handleChange('resolution', parseInt(e.target.value))}
           />
-          <div className="flex justify-between mt-2 text-xs text-slate-400 font-medium">
+          <div className="flex justify-between mt-2 text-xs text-black font-bold">
             <span>128px</span>
             <span>1024px</span>
           </div>
@@ -46,8 +46,8 @@ export const AdvancedTab: React.FC<AdvancedTabProps> = ({ state, setState }) => 
 
         <div className="pt-6 border-t border-slate-100">
           <div className="flex justify-between items-center mb-4">
-            <label className="block text-sm font-medium text-slate-700">Quiet Zone / Margin</label>
-            <span className="text-xs font-medium px-2 py-1 bg-slate-100 text-slate-600 rounded-md">
+            <label className="block text-sm font-bold text-black">Quiet Zone / Margin</label>
+            <span className="text-xs font-bold px-2 py-1 bg-slate-100 text-black rounded-md">
               {advanced.margin}px
             </span>
           </div>
@@ -60,14 +60,14 @@ export const AdvancedTab: React.FC<AdvancedTabProps> = ({ state, setState }) => 
             value={advanced.margin}
             onChange={(e) => handleChange('margin', parseInt(e.target.value))}
           />
-          <div className="flex justify-between mt-2 text-xs text-slate-400 font-medium">
+          <div className="flex justify-between mt-2 text-xs text-black font-bold">
             <span>0px</span>
             <span>50px</span>
           </div>
         </div>
 
         <div className="pt-6 border-t border-slate-100">
-          <label className="block text-sm font-medium text-slate-700 mb-4">Error Recovery Level</label>
+          <label className="block text-sm font-bold text-black mb-4">Error Recovery Level</label>
           <div className="grid grid-cols-4 gap-3">
             {['L', 'M', 'Q', 'H'].map((level) => (
               <button
@@ -76,11 +76,11 @@ export const AdvancedTab: React.FC<AdvancedTabProps> = ({ state, setState }) => 
                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${
                   advanced.errorCorrectionLevel === level
                     ? 'bg-indigo-50 border-indigo-400 text-indigo-700 shadow-sm'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    : 'bg-white border-slate-200 text-black hover:bg-slate-50'
                 }`}
               >
                 <span className="text-lg font-bold mb-1">{level}</span>
-                <span className="text-[10px] uppercase tracking-wider font-medium opacity-70">
+                <span className="text-[10px] uppercase tracking-wider font-bold opacity-70">
                   {level === 'L' && '7%'}
                   {level === 'M' && '15%'}
                   {level === 'Q' && '25%'}
@@ -89,7 +89,7 @@ export const AdvancedTab: React.FC<AdvancedTabProps> = ({ state, setState }) => 
               </button>
             ))}
           </div>
-          <p className="text-xs text-slate-500 mt-4 leading-relaxed">
+          <p className="text-xs text-black font-bold mt-4 leading-relaxed">
             Higher error recovery allows more of the QR code to be damaged or covered by a logo while still remaining scannable.
           </p>
         </div>

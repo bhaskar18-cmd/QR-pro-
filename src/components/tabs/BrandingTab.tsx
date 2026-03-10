@@ -226,51 +226,51 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
           className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
             branding.type === 'image'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
-              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+              : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
           <ImageIcon className="w-5 h-5 mb-2" />
-          <span className="text-xs font-medium">Image</span>
+          <span className="text-xs font-bold">Image</span>
         </button>
         <button
           onClick={() => handleChange('type', 'text')}
           className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
             branding.type === 'text'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
-              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+              : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
           <Type className="w-5 h-5 mb-2" />
-          <span className="text-xs font-medium">Text</span>
+          <span className="text-xs font-bold">Text</span>
         </button>
         <button
           onClick={() => handleChange('type', 'icon')}
           className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
             branding.type === 'icon'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
-              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+              : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
           <LayoutGrid className="w-5 h-5 mb-2" />
-          <span className="text-xs font-medium text-center">Vector Icon</span>
+          <span className="text-xs font-bold text-center">Vector Icon</span>
         </button>
         <button
           onClick={() => handleChange('type', 'app')}
           className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all ${
             branding.type === 'app'
               ? 'bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm'
-              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+              : 'bg-white border-slate-200 text-black hover:bg-slate-50'
           }`}
         >
           <Smartphone className="w-5 h-5 mb-2" />
-          <span className="text-xs font-medium text-center">Real App</span>
+          <span className="text-xs font-bold text-center">Real App</span>
         </button>
       </div>
 
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         {branding.type === 'image' && (
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-700">Upload Logo</label>
+            <label className="block text-sm font-bold text-black">Upload Logo</label>
             <div className="relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center hover:border-indigo-400 hover:bg-indigo-50/50 transition-all group">
               <input
                 type="file"
@@ -283,7 +283,7 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
                   <Upload className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-700">Click or drag image to upload</p>
+                  <p className="text-sm font-bold text-black">Click or drag image to upload</p>
                   <p className="text-xs text-slate-500 mt-1">PNG, JPG, SVG up to 5MB</p>
                 </div>
               </div>
@@ -292,11 +292,11 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
               <div className="mt-4 flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
                 <div className="flex items-center space-x-3">
                   <img src={branding.logoUrl} alt="Logo preview" className="w-10 h-10 rounded-lg object-cover border border-slate-200" />
-                  <span className="text-sm font-medium text-slate-700">Current Logo</span>
+                  <span className="text-sm font-bold text-black">Current Logo</span>
                 </div>
                 <button
                   onClick={() => handleChange('logoUrl', null)}
-                  className="text-xs font-medium text-red-600 hover:text-red-700 px-3 py-1.5 bg-red-50 rounded-lg transition-colors"
+                  className="text-xs font-bold text-red-600 hover:text-red-700 px-3 py-1.5 bg-red-50 rounded-lg transition-colors"
                 >
                   Remove
                 </button>
@@ -307,16 +307,16 @@ export const BrandingTab: React.FC<BrandingTabProps> = ({ state, setState }) => 
 
         {branding.type === 'text' && (
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-700">Logo Text</label>
+            <label className="block text-sm font-bold text-black">Logo Text</label>
             <input
               type="text"
               maxLength={10}
-              className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 text-black"
               placeholder="e.g., QRCRAFT"
               value={branding.textValue}
               onChange={(e) => handleChange('textValue', e.target.value)}
             />
-            <p className="text-xs text-slate-500">Max 10 characters. Colors will match your Style settings.</p>
+            <p className="text-xs font-bold text-black">Max 10 characters. Colors will match your Style settings.</p>
           </div>
         )}
 

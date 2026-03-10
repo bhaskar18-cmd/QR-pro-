@@ -47,7 +47,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('Content');
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white overflow-x-hidden relative">
+    <div className="min-h-screen bg-[#0f172a] text-slate-900 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden relative">
       <FuturisticBackground />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
@@ -58,7 +58,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="text-2xl font-bold tracking-tight text-white">QR Craft</h1>
-              <p className="text-sm font-medium text-slate-400">Next-Gen Professional QR Code Generator</p>
+              <p className="text-sm font-bold text-slate-100">Next-Gen Professional QR Code Generator</p>
             </div>
           </div>
         </header>

@@ -96,12 +96,12 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
       ) : (
         <div className="space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wider">Shape Engine</h3>
+            <h3 className="text-sm font-bold text-black mb-4 uppercase tracking-wider">Shape Engine</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Dots Pattern</label>
+                <label className="block text-sm font-bold text-black mb-2">Dots Pattern</label>
                 <select
-                  className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white"
+                  className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white text-black"
                   value={style.dotsType}
                   onChange={(e) => handleChange('dotsType', e.target.value)}
                 >
@@ -115,9 +115,9 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Corner Frame</label>
+                  <label className="block text-sm font-bold text-black mb-2">Corner Frame</label>
                   <select
-                    className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white"
+                    className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white text-black"
                     value={style.cornersSquareType}
                     onChange={(e) => handleChange('cornersSquareType', e.target.value)}
                   >
@@ -127,9 +127,9 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Corner Center</label>
+                  <label className="block text-sm font-bold text-black mb-2">Corner Center</label>
                   <select
-                    className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white"
+                    className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white text-black"
                     value={style.cornersDotType}
                     onChange={(e) => handleChange('cornersDotType', e.target.value)}
                   >
@@ -142,11 +142,11 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
           </div>
 
           <div className="pt-4 border-t border-slate-100">
-            <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wider">Color Palette</h3>
+            <h3 className="text-sm font-bold text-black mb-4 uppercase tracking-wider">Color Palette</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Background Color</label>
+                  <label className="block text-sm font-bold text-black mb-2">Background Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
@@ -157,7 +157,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                     />
                     <input
                       type="text"
-                      className="flex-1 p-2 border border-slate-200 rounded-lg text-sm uppercase"
+                      className="flex-1 p-2 border border-slate-200 rounded-lg text-sm uppercase text-black"
                       value={style.bgColor}
                       onChange={(e) => handleChange('bgColor', e.target.value)}
                       disabled={!!style.bgImage}
@@ -165,7 +165,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Foreground Color</label>
+                  <label className="block text-sm font-bold text-black mb-2">Foreground Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
@@ -176,7 +176,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                     />
                     <input
                       type="text"
-                      className="flex-1 p-2 border border-slate-200 rounded-lg text-sm uppercase"
+                      className="flex-1 p-2 border border-slate-200 rounded-lg text-sm uppercase text-black"
                       value={style.fgColor}
                       onChange={(e) => handleChange('fgColor', e.target.value)}
                       disabled={style.gradientEnabled}
@@ -186,10 +186,10 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Background Image</label>
+                <label className="block text-sm font-bold text-black mb-2">Background Image</label>
                 <div className="flex items-center space-x-3">
                   <label className="flex-1 cursor-pointer bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm text-center hover:bg-slate-100 transition-colors">
-                    <span className="text-slate-600 font-medium">Upload Image</span>
+                    <span className="text-black font-bold">Upload Image</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -213,14 +213,14 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                         handleChange('bgImage', null);
                         handleChange('bgColor', '#ffffff');
                       }}
-                      className="px-3 py-2 bg-red-50 text-red-600 text-sm font-medium rounded-lg hover:bg-red-100 transition-colors"
+                      className="px-3 py-2 bg-red-50 text-red-600 text-sm font-bold rounded-lg hover:bg-red-100 transition-colors"
                     >
                       Remove
                     </button>
                   )}
                 </div>
                 {style.bgImage && (
-                  <div className="mt-2 text-xs text-slate-500">
+                  <div className="mt-2 text-xs font-bold text-black">
                     Background color set to transparent for image visibility.
                   </div>
                 )}
@@ -234,14 +234,14 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                     checked={style.gradientEnabled}
                     onChange={(e) => handleChange('gradientEnabled', e.target.checked)}
                   />
-                  <span className="text-sm font-medium text-slate-700">Enable Gradient Foreground</span>
+                  <span className="text-sm font-bold text-black">Enable Gradient Foreground</span>
                 </label>
 
                 {style.gradientEnabled && (
                   <div className="space-y-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-medium text-slate-500 mb-1">Start Color</label>
+                        <label className="block text-xs font-bold text-black mb-1">Start Color</label>
                         <input
                           type="color"
                           className="w-full h-8 rounded cursor-pointer border-0 p-0"
@@ -250,7 +250,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-slate-500 mb-1">End Color</label>
+                        <label className="block text-xs font-bold text-black mb-1">End Color</label>
                         <input
                           type="color"
                           className="w-full h-8 rounded cursor-pointer border-0 p-0"
@@ -262,9 +262,9 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                     
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-medium text-slate-500 mb-1">Type</label>
+                        <label className="block text-xs font-bold text-black mb-1">Type</label>
                         <select
-                          className="w-full p-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white"
+                          className="w-full p-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white text-black"
                           value={style.gradientType}
                           onChange={(e) => handleChange('gradientType', e.target.value)}
                         >
@@ -274,7 +274,7 @@ export const StyleTab: React.FC<StyleTabProps> = ({ state, setState }) => {
                       </div>
                       {style.gradientType === 'linear' && (
                         <div>
-                          <label className="block text-xs font-medium text-slate-500 mb-1">
+                          <label className="block text-xs font-bold text-black mb-1">
                             Rotation ({style.gradientRotation}°)
                           </label>
                           <input
