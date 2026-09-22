@@ -1,5 +1,6 @@
 {
   "name": "QR craft®",
   "description": "Next-Gen Professional QR Code Generator",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

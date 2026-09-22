@@ -32,6 +32,8 @@ export interface ContentState {
   vevent: VEventData;
 }
 
+export type QRFrameStyle = 'none' | 'scan-me' | 'luxury-badge' | 'minimal-pill' | 'futuristic-hud';
+
 export interface StyleState {
   isAdvanced: boolean;
   dotsType: 'rounded' | 'dots' | 'classy' | 'classy-rounded' | 'square' | 'extra-rounded';
@@ -45,6 +47,12 @@ export interface StyleState {
   gradientEnd: string;
   gradientType: 'linear' | 'radial';
   gradientRotation: number;
+  customCorners?: boolean;
+  cornersSquareColor?: string;
+  cornersDotColor?: string;
+  frameStyle?: QRFrameStyle;
+  frameText?: string;
+  frameColor?: string;
 }
 
 export interface BrandingState {

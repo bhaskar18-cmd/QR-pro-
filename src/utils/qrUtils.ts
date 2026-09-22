@@ -55,11 +55,19 @@ export const generateQROptions = (state: AppState): Options => {
       color: style.bgColor,
     },
     cornersSquareOptions: {
-      color: style.fgColor,
+      color: style.customCorners && style.cornersSquareColor
+        ? style.cornersSquareColor
+        : style.gradientEnabled
+        ? style.gradientStart
+        : style.fgColor,
       type: style.cornersSquareType as any,
     },
     cornersDotOptions: {
-      color: style.fgColor,
+      color: style.customCorners && style.cornersDotColor
+        ? style.cornersDotColor
+        : style.gradientEnabled
+        ? style.gradientEnd
+        : style.fgColor,
       type: style.cornersDotType as any,
     },
   };

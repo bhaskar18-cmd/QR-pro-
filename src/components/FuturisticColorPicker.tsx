@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { colord, AnyColor } from 'colord';
-
 import { X } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 interface FuturisticColorPickerProps {
   color: string;
@@ -10,6 +10,7 @@ interface FuturisticColorPickerProps {
 }
 
 export const FuturisticColorPicker: React.FC<FuturisticColorPickerProps> = ({ color, onChange, onClose }) => {
+  const { isClean } = useTheme();
   const wheelRef = useRef<HTMLDivElement>(null);
   const [isDraggingWheel, setIsDraggingWheel] = useState(false);
   const [isDraggingBrightness, setIsDraggingBrightness] = useState(false);
@@ -91,16 +92,23 @@ export const FuturisticColorPicker: React.FC<FuturisticColorPickerProps> = ({ co
 
   // Calculate indicator position
   const angleRad = (hue * Math.PI) / 180;
-  const radius = 100; // base radius for calculation
   const indicatorX = 50 + (saturation / 2) * Math.cos(angleRad);
   const indicatorY = 50 + (saturation / 2) * Math.sin(angleRad);
 
   return (
-    <div className="relative flex flex-col items-center space-y-5 p-5 bg-[#1a1a1a] rounded-[2.5rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+    <div
+      className={`relative flex flex-col items-center space-y-4 p-5 rounded-3xl border transition-all ${
+        isClean
+          ? 'bg-white border-slate-200 shadow-2xl text-slate-800'
+          : 'bg-[#1a1a1a] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl text-white'
+      }`}
+    >
       {onClose && (
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 text-white/30 hover:text-white transition-colors z-20"
+          className={`absolute top-4 right-4 p-1 transition-colors z-20 cursor-pointer ${
+            isClean ? 'text-slate-400 hover:text-slate-700' : 'text-white/30 hover:text-white'
+          }`}
         >
           <X className="w-4 h-4" />
         </button>
@@ -108,7 +116,9 @@ export const FuturisticColorPicker: React.FC<FuturisticColorPickerProps> = ({ co
       {/* Color Wheel */}
       <div 
         ref={wheelRef}
-        className="relative w-44 h-44 rounded-full cursor-crosshair shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] overflow-hidden border-4 border-[#2a2a2a]"
+        className={`relative w-44 h-44 rounded-full cursor-crosshair overflow-hidden border-4 ${
+          isClean ? 'border-slate-100 shadow-sm' : 'border-[#2a2a2a] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]'
+        }`}
         style={{
           background: `
             radial-gradient(circle, #fff 0%, transparent 100%),
@@ -130,9 +140,14 @@ export const FuturisticColorPicker: React.FC<FuturisticColorPickerProps> = ({ co
       </div>
 
       {/* Brightness Slider */}
-      <div className="w-full space-y-1.5">
+      <div className="w-full space-y-1">
+        <span className={`text-[10px] font-mono uppercase block ${isClean ? 'text-slate-500' : 'text-slate-400'}`}>
+          Brightness
+        </span>
         <div 
-          className="relative h-6 w-full rounded-full cursor-pointer overflow-hidden bg-[#111] border border-white/5"
+          className={`relative h-5 w-full rounded-full cursor-pointer overflow-hidden border ${
+            isClean ? 'bg-slate-100 border-slate-200' : 'bg-[#111] border-white/5'
+          }`}
           onMouseDown={(e) => {
             setIsDraggingBrightness(true);
             handleBrightnessMove(e as any);
@@ -142,16 +157,21 @@ export const FuturisticColorPicker: React.FC<FuturisticColorPickerProps> = ({ co
           }}
         >
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-black/20 shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-black/20 shadow-md"
             style={{ left: `calc(${brightness}% - 8px)` }}
           />
         </div>
       </div>
 
       {/* Saturation Slider */}
-      <div className="w-full space-y-1.5">
+      <div className="w-full space-y-1">
+        <span className={`text-[10px] font-mono uppercase block ${isClean ? 'text-slate-500' : 'text-slate-400'}`}>
+          Saturation
+        </span>
         <div 
-          className="relative h-6 w-full rounded-full cursor-pointer overflow-hidden bg-[#111] border border-white/5"
+          className={`relative h-5 w-full rounded-full cursor-pointer overflow-hidden border ${
+            isClean ? 'bg-slate-100 border-slate-200' : 'bg-[#111] border-white/5'
+          }`}
           onMouseDown={(e) => {
             const slider = (e.currentTarget as HTMLElement).getBoundingClientRect();
             const x = Math.max(0, Math.min(slider.width, e.clientX - slider.left));
@@ -164,26 +184,16 @@ export const FuturisticColorPicker: React.FC<FuturisticColorPickerProps> = ({ co
           }}
         >
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-black/20 shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full border border-black/20 shadow-md"
             style={{ left: `calc(${saturation}% - 8px)` }}
           />
         </div>
       </div>
 
-      {/* On/Off Style Buttons (Matching the image) */}
-      <div className="flex space-x-4 w-full justify-center">
-        <button className="px-4 py-1.5 rounded-full bg-[#2a2a2a] text-[10px] font-bold text-white/50 border border-white/5 hover:bg-[#333] transition-colors">
-          Off
-        </button>
-        <button className="px-4 py-1.5 rounded-full bg-indigo-600 text-[10px] font-bold text-white border border-white/10 shadow-[0_0_15px_rgba(79,70,229,0.4)]">
-          On
-        </button>
-      </div>
-
       {/* Hex Input */}
-      <div className="flex items-center space-x-2 w-full px-2">
+      <div className="flex items-center space-x-2 w-full pt-1">
         <div 
-          className="w-8 h-8 rounded-lg border border-white/10 shadow-lg shrink-0"
+          className="w-8 h-8 rounded-lg border border-slate-300/40 shadow-xs shrink-0"
           style={{ backgroundColor: color }}
         />
         <input 
@@ -195,7 +205,11 @@ export const FuturisticColorPicker: React.FC<FuturisticColorPickerProps> = ({ co
               onChange(val);
             }
           }}
-          className="w-full bg-black/30 border border-white/5 rounded-lg px-2 py-1.5 text-[10px] font-mono text-white/70 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 text-center"
+          className={`w-full border rounded-lg px-2.5 py-1.5 text-xs font-mono text-center focus:outline-none ${
+            isClean
+              ? 'bg-slate-50 border-slate-300 text-slate-900 focus:ring-1 focus:ring-blue-500'
+              : 'bg-black/30 border-white/10 text-white focus:ring-1 focus:ring-indigo-500/50'
+          }`}
         />
       </div>
     </div>

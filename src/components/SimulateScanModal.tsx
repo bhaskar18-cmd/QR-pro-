@@ -200,47 +200,47 @@ export const SimulateScanModal: React.FC<SimulateScanModalProps> = ({ state, onC
               {/* Extra Details for Specific Types */}
               {state.content.type === 'wifi' && (
                 <div className="bg-white/5 rounded-xl p-3 space-y-2 border border-white/10">
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">Password</span>
-                    <span className="text-white text-sm font-medium">{state.content.wifi.password || 'None'}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">Password</span>
+                    <span className="text-white text-sm font-medium break-all text-right">{state.content.wifi.password || 'None'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">Encryption</span>
-                    <span className="text-white text-sm font-medium">{state.content.wifi.encryption}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">Encryption</span>
+                    <span className="text-white text-sm font-medium text-right">{state.content.wifi.encryption}</span>
                   </div>
                 </div>
               )}
 
               {state.content.type === 'vcard' && (
                 <div className="bg-white/5 rounded-xl p-3 space-y-2 border border-white/10">
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">Phone</span>
-                    <span className="text-white text-sm font-medium">{state.content.vcard.phone}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">Phone</span>
+                    <span className="text-white text-sm font-medium break-all text-right">{state.content.vcard.phone}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">Email</span>
-                    <span className="text-white text-sm font-medium">{state.content.vcard.email}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">Email</span>
+                    <span className="text-white text-sm font-medium break-all text-right">{state.content.vcard.email}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">Company</span>
-                    <span className="text-white text-sm font-medium">{state.content.vcard.company}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">Company</span>
+                    <span className="text-white text-sm font-medium break-all text-right">{state.content.vcard.company}</span>
                   </div>
                 </div>
               )}
 
               {state.content.type === 'vevent' && (
                 <div className="bg-white/5 rounded-xl p-3 space-y-2 border border-white/10">
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">Location</span>
-                    <span className="text-white text-sm font-medium">{state.content.vevent.location}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">Location</span>
+                    <span className="text-white text-sm font-medium break-all text-right">{state.content.vevent.location}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">Start</span>
-                    <span className="text-white text-sm font-medium">{new Date(state.content.vevent.startTime).toLocaleString()}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">Start</span>
+                    <span className="text-white text-sm font-medium text-right">{new Date(state.content.vevent.startTime).toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white/60 text-sm">End</span>
-                    <span className="text-white text-sm font-medium">{new Date(state.content.vevent.endTime).toLocaleString()}</span>
+                  <div className="flex justify-between items-start gap-4">
+                    <span className="text-white/60 text-sm shrink-0">End</span>
+                    <span className="text-white text-sm font-medium text-right">{new Date(state.content.vevent.endTime).toLocaleString()}</span>
                   </div>
                 </div>
               )}
